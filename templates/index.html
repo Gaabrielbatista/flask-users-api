@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API Carros — Home</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; max-width: 900px; margin: 2rem auto; padding: 1rem; color: #222 }
+    header { display: flex; align-items: center; justify-content: space-between }
+    nav a { margin-left: 1rem; text-decoration: none; color: #0366d6 }
+    .card { border: 1px solid #e1e4e8; padding: 1rem; border-radius: 6px; margin-top: 1rem; background: #fafbfc }
+    footer { text-align: center; margin-top: 2rem; color: #666 }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>API Carros</h1>
+    <nav>
+      <a href="/carros">Lista de Carros</a>
+      <a href="/carros/novo">Cadastrar Carro</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>Bem-vindo à API de exemplo para aprender Flask. Use os links acima para navegar entre a lista de carros e o formulário de cadastro.</p>
+
+    <section class="card">
+      <h2>Rotas úteis</h2>
+      <ul>
+        <li><strong>GET /carros</strong> — Retorna a lista de carros (JSON).</li>
+        <li><strong>POST /carros</strong> — Cadastra um novo carro (JSON).</li>
+        <li><strong>GET /carros/novo</strong> — Formulário HTML para cadastrar um carro.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Como testar</h2>
+      <p>Você pode testar a API com o formulário (clicando em <em>Cadastrar Carro</em>) ou usando ferramentas como <code>curl</code> e <code>Postman</code>.</p>
+    </section>
+  </main>
+
+  <footer>
+    API Flask de aprendizado — criado para demonstração
+  </footer>
+</body>
+</html>
