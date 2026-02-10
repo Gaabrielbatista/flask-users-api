@@ -24,7 +24,7 @@ def create_carro():
     carro = request.json
     Carros.append(carro)
 
-    return make_response(jsonify(Mensagem=f"Carro cadastrado com sucesso no ID: {carro["id"]}.", Dados=carro))
+    return make_response(jsonify(Mensagem=f"Carro cadastrado com sucesso no ID: {carro['id']}.", Dados=carro))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()
