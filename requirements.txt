@@ -1,0 +1,2 @@
+Flask = 2.3.3
+my-sql-connector-python = 8.0.34
