@@ -49,7 +49,7 @@ python app/app.py
 Crie um arquivo `.env` com as variáveis de ambiente do MySQL (exemplo):
 
 ```env
-MYSQL_DATABASE=gaabrielDB
+MYSQL_DATABASE=bancodados
 MYSQL_ROOT_PASSWORD=secret
 MYSQL_USER=usuario
 MYSQL_PASSWORD=senha
