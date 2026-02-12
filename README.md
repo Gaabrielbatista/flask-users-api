@@ -91,4 +91,3 @@ curl -X POST http://localhost:5000/carros \
 Projeto de aprendizado — sem licença definida.
 
 ---
-Se quiser, adiciono: testes automatizados, rota `GET /carros/novo`, ou integração com MySQL.
