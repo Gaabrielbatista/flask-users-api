@@ -1,14 +1,13 @@
 from flask import Flask, jsonify, request
 from bd import Carros
 import mysql.connector
-from mysql.connector import errorcode
 
 cnx = mysql.connector.connect(
-        user='flask_user',
-        password='flask_pass123',
-        host='localhost',
-        database='gaabrieldb',
-        port='3307',
+        user='',
+        password='',
+        host='',
+        database='',
+        port='',
     )
 
 app = Flask(__name__)
