@@ -1,13 +1,17 @@
 from flask import Flask, jsonify, request
 from bd import Carros
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 cnx = mysql.connector.connect(
-        user='',
-        password='',
-        host='',
-        database='',
-        port='',
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        host=os.getenv('MYSQL_HOST'),
+        database=os.getenv('MYSQL_DATABASE'),
+        port=3307
     )
 
 app = Flask(__name__)
@@ -32,7 +36,7 @@ def get_carro():
             }
         )
     cursor.close()
-
+    
     return jsonify(menssagem='Carros.', dados=result)
 
 # Arrumar
