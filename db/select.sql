@@ -1,1 +1,1 @@
-SELECT * FROM carros;
+SELECT * FROM carros WHERE ano >= 1985;
