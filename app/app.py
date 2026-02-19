@@ -52,7 +52,9 @@ def create_carro():
 
     cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"]))
     
+    cnx.commit()
     cursor.close()
+
     return jsonify(Mensagem=f"Carro cadastrado com sucesso!", Dados=carro)
 
 if __name__ == '__main__':
