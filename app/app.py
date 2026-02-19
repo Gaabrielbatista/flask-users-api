@@ -26,7 +26,7 @@ def get_carro():
 
     query = 'SELECT * FROM carros'
     cursor.execute(query)
-    
+
     carros = cursor.fetchall()
 
     result = list()
@@ -42,7 +42,7 @@ def get_carro():
         )
     cursor.close()
     
-    return jsonify(menssagem='Carros.', dados=result)
+    return jsonify(menssagem="Carros:", dados=result)
 
 @app.route('/carros', methods=['POST'])
 def create_carro():
@@ -67,7 +67,7 @@ def delete_carro(id):
     cnx.commit()    
     cursor.close()
 
-    return jsonify(Mensagem="Sucesso!", Dados=id)
+    return jsonify(mensagem="Sucesso!", dados=id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('PORT'), load_dotenv=True)
