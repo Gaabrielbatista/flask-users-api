@@ -55,6 +55,5 @@ def create_carro():
     cursor.close()
     return jsonify(Mensagem=f"Carro cadastrado com sucesso!", Dados=carro)
 
-
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('PORT'), load_dotenv=True)
