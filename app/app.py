@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from bd import Carros
 import mysql.connector
 from dotenv import load_dotenv
@@ -15,6 +16,7 @@ cnx = mysql.connector.connect(
     )
 
 app = Flask(__name__)
+cors = CORS(app)
 # Parar de ordenar
 app.json.sort_keys = False
 
@@ -22,7 +24,8 @@ app.json.sort_keys = False
 @app.route('/carros', methods=['GET'])
 def get_carro():
     cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM carros;')
+    query = 'SELECT * FROM carros'
+    cursor.execute(query)
     carros = cursor.fetchall()
     result = list()
 
@@ -43,9 +46,15 @@ def get_carro():
 @app.route('/carros', methods=['POST'])
 def create_carro():
     carro = request.json
-    Carros.append(carro)
+    cursor = cnx.cursor()
 
-    return jsonify(Mensagem=f"Carro cadastrado com sucesso no ID: {carro['id']}.", Dados=carro)
+    query = 'INSERT INTO carros (marca, modelo, ano) VALUES (%s, %s, %s)'
+
+    cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"]))
+    
+    cursor.close()
+    return jsonify(Mensagem=f"Carro cadastrado com sucesso!", Dados=carro)
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=os.getenv('PORT'), load_dotenv=True)
