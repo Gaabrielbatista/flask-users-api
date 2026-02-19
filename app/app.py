@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from bd import Carros
 import mysql.connector
 from dotenv import load_dotenv
 import os
@@ -20,13 +19,14 @@ cors = CORS(app)
 # Parar de ordenar
 app.json.sort_keys = False
 
-# Endpoint para listar e cadastrar carros
+# Endpoints
 @app.route('/carros', methods=['GET'])
 def get_carro():
     cursor = cnx.cursor()
     query = 'SELECT * FROM carros'
     cursor.execute(query)
     carros = cursor.fetchall()
+
     result = list()
 
     for carro in carros:
@@ -42,7 +42,6 @@ def get_carro():
     
     return jsonify(menssagem='Carros.', dados=result)
 
-# Arrumar
 @app.route('/carros', methods=['POST'])
 def create_carro():
     carro = request.json
@@ -55,7 +54,20 @@ def create_carro():
     cnx.commit()
     cursor.close()
 
-    return jsonify(Mensagem=f"Carro cadastrado com sucesso!", Dados=carro)
+    return jsonify(mensagem=f"Carro cadastrado com sucesso!", dados=carro)  
+
+@app.route('/carros/<int:id>', methods=['DELETE'])
+def delete_carro(id):
+    cursor = cnx.cursor()
+
+    query = 'DELETE FROM carros WHERE id = %s'
+    
+    cursor.execute(query, (id,))
+
+    cnx.commit()    
+    cursor.close()
+
+    return jsonify(Mensagem="Sucesso!", Dados=id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('PORT'), load_dotenv=True)
