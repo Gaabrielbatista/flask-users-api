@@ -23,8 +23,10 @@ app.json.sort_keys = False
 @app.route('/carros', methods=['GET'])
 def get_carro():
     cursor = cnx.cursor()
+
     query = 'SELECT * FROM carros'
     cursor.execute(query)
+    
     carros = cursor.fetchall()
 
     result = list()
@@ -48,7 +50,6 @@ def create_carro():
     cursor = cnx.cursor()
 
     query = 'INSERT INTO carros (marca, modelo, ano) VALUES (%s, %s, %s)'
-
     cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"]))
     
     cnx.commit()
@@ -61,7 +62,6 @@ def delete_carro(id):
     cursor = cnx.cursor()
 
     query = 'DELETE FROM carros WHERE id = %s'
-    
     cursor.execute(query, (id,))
 
     cnx.commit()    
