@@ -57,6 +57,19 @@ def create_carro():
 
     return jsonify(mensagem=f"Carro cadastrado com sucesso!", dados=carro)  
 
+@app.route('/carros/<int:id>', methods=['PUT'])
+def update_carro(id):
+    carro = request.json
+    cursor = cnx.cursor()
+
+    query = 'UPDATE carros SET marca = %s, modelo = %s, ano = %s WHERE id = %s'
+    cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"], id))
+
+    cnx.commit()
+    cursor.close()
+
+    return jsonify(mensagem="Sucesso!", dados=carro)
+
 @app.route('/carros/<int:id>', methods=['DELETE'])
 def delete_carro(id):
     cursor = cnx.cursor()
