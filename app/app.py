@@ -55,7 +55,7 @@ def create_carro():
     cnx.commit()
     cursor.close()
 
-    return jsonify(mensagem=f"Carro cadastrado com sucesso!", dados=carro)  
+    return jsonify(mensagem="Sucesso!", dados=carro)  
 
 @app.route('/carros/<int:id>', methods=['PUT'])
 def update_carro(id):
@@ -80,7 +80,7 @@ def delete_carro(id):
     cnx.commit()    
     cursor.close()
 
-    return jsonify(mensagem="Sucesso!", dados=id)
+    return jsonify(mensagem="Sucesso!", id=id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv('PORT'), load_dotenv=True)
