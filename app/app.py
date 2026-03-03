@@ -16,6 +16,7 @@ cnx = mysql.connector.connect(
 
 app = Flask(__name__)
 cors = CORS(app)
+
 # Parar de ordenar
 app.json.sort_keys = False
 
