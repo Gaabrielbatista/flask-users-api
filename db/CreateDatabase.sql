@@ -1,10 +1,10 @@
 USE gaabrieldb;
 
-CREATE TABLE carros (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER NOT NULL auto_increment,
-    marca VARCHAR(100),
-    modelo VARCHAR(100),
-    ano INTEGER,
+    nome VARCHAR(100),
+    email VARCHAR(100),
+    idade INTEGER,
     PRIMARY KEY (id)
 );
 

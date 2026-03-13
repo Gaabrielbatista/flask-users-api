@@ -21,61 +21,62 @@ cors = CORS(app)
 app.json.sort_keys = False
 
 # Endpoints
-@app.route('/carros', methods=['GET'])
-def get_carro():
+@app.route('/users', methods=['GET'])
+def get_users():
     cursor = cnx.cursor()
 
-    query = 'SELECT * FROM carros'
+    query = 'SELECT * FROM users'
     cursor.execute(query)
 
-    carros = cursor.fetchall()
+    users = cursor.fetchall()
 
     result = list()
 
-    for carro in carros:
+    for user in users:
         result.append(
             {
-                "id":  carro[0],
-                "marca": carro[1],
-                "modelo": carro[2],
-                "ano": carro[3]
+                "id":  user[0],
+                "nome": user[1],
+                "email": user[2],
+                "idade": user[3]
             }
         )
     cursor.close()
-    
-    return jsonify(menssagem="Carros:", dados=result)
 
-@app.route('/carros', methods=['POST'])
-def create_carro():
-    carro = request.json
+    return jsonify(menssagem="Users:", dados=result)
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    user = request.json
     cursor = cnx.cursor()
-
-    query = 'INSERT INTO carros (marca, modelo, ano) VALUES (%s, %s, %s)'
-    cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"]))
+    print(user)
+    query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
+    cursor.execute(query, (user["nome"], user["email"], user["idade"]))
     
     cnx.commit()
     cursor.close()
 
-    return jsonify(mensagem="Sucesso!", dados=carro)  
+    
+    return jsonify(mensagem="Sucesso!", dados=user)  
 
-@app.route('/carros/<int:id>', methods=['PUT'])
-def update_carro(id):
-    carro = request.json
+@app.route('/users/<int:id>', methods=['PUT'])
+def update_user(id):
+    user = request.json
     cursor = cnx.cursor()
 
-    query = 'UPDATE carros SET marca = %s, modelo = %s, ano = %s WHERE id = %s'
-    cursor.execute(query, (carro["marca"], carro["modelo"], carro["ano"], id))
+    query = 'UPDATE users SET nome = %s, email = %s, idade = %s WHERE id = %s'
+    cursor.execute(query, (user["nome"], user["email"], user["idade"], id))
 
     cnx.commit()
     cursor.close()
 
-    return jsonify(mensagem="Sucesso!", dados=carro)
+    return jsonify(mensagem="Sucesso!", dados=user)
 
-@app.route('/carros/<int:id>', methods=['DELETE'])
-def delete_carro(id):
+@app.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
     cursor = cnx.cursor()
 
-    query = 'DELETE FROM carros WHERE id = %s'
+    query = 'DELETE FROM users WHERE id = %s'
     cursor.execute(query, (id,))
 
     cnx.commit()    
