@@ -41,9 +41,29 @@ def get_users():
                 "idade": user[3]
             }
         )
-    cursor.close()
 
-    return jsonify(menssagem="Users:", dados=result)
+    cursor.close()
+    return jsonify(menssagem="Users", dados=result)
+
+@app.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    cursor = cnx.cursor()
+
+    query = 'SELECT * FROM users WHERE id = %s'
+    cursor.execute(query, (id,))
+
+    db_result = cursor.fetchall()
+    row = db_result[0]
+
+    user = {
+        "id": row[0],
+        "nome": row[1],
+        "email":row[2],
+        "idade": row[3]
+    }
+
+    cursor.close()
+    return jsonify(mensagem="User", dados=user)
 
 @app.route('/users', methods=['POST'])
 def create_user():
@@ -55,8 +75,6 @@ def create_user():
     
     cnx.commit()
     cursor.close()
-
-    
     return jsonify(mensagem="Sucesso!", dados=user)  
 
 @app.route('/users/<int:id>', methods=['PUT'])
@@ -69,7 +87,6 @@ def update_user(id):
 
     cnx.commit()
     cursor.close()
-
     return jsonify(mensagem="Sucesso!", dados=user)
 
 @app.route('/users/<int:id>', methods=['DELETE'])
@@ -81,7 +98,6 @@ def delete_user(id):
 
     cnx.commit()    
     cursor.close()
-
     return jsonify(mensagem="Sucesso!", id=id)
 
 if __name__ == '__main__':
