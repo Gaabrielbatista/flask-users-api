@@ -1,10 +1,10 @@
 # API Flask de Aprendizado - Gerenciamento de Usuários
 
-Este é um projeto de API RESTful desenvolvida com Flask para fins de aprendizado e demonstração de conceitos fundamentais de desenvolvimento backend. A API permite o gerenciamento completo de usuários (CRUD) utilizando MySQL como banco de dados.
+API RESTful desenvolvida com Flask para fins de aprendizado e demonstração de conceitos fundamentais de desenvolvimento backend. Permite o gerenciamento completo de usuários (CRUD) utilizando MySQL como banco de dados.
 
 ## 📋 Descrição
 
-Projeto educacional que implementa uma API simples para operações CRUD (Create, Read, Update, Delete) em usuários. Desenvolvido como parte do aprendizado em desenvolvimento de APIs com Python e Flask, demonstrando boas práticas como estruturação de código, validação de dados, conexão com banco de dados e deploy com Docker.
+Projeto educacional que implementa operações CRUD (Create, Read, Update, Delete) em usuários. Desenvolvido como parte do aprendizado em desenvolvimento de APIs com Python e Flask, demonstrando boas práticas como estruturação de código, validação de dados, conexão com banco de dados e deploy com Docker.
 
 ## 🚀 Funcionalidades
 
@@ -49,11 +49,11 @@ project/
 
 | Método | Endpoint       | Descrição                    |
 |--------|----------------|------------------------------|
-| GET    | `/users`      | Lista todos os usuários     |
-| GET    | `/users/<id>` | Busca usuário por ID        |
-| POST   | `/users`      | Cria um novo usuário        |
-| PUT    | `/users/<id>` | Atualiza usuário existente  |
-| DELETE | `/users/<id>` | Exclui usuário              |
+| GET    | `/users`       | Lista todos os usuários      |
+| GET    | `/users/<id>`  | Busca usuário por ID         |
+| POST   | `/users`       | Cria um novo usuário         |
+| PUT    | `/users/<id>`  | Atualiza usuário existente   |
+| DELETE | `/users/<id>`  | Exclui usuário               |
 
 ### Exemplo de Payload (POST/PUT)
 
@@ -87,57 +87,67 @@ CREATE TABLE users (
 
 ### Executando Localmente
 
-1. **Clone o repositório** (se aplicável)
-
-2. **Instale as dependências**:
+1. **Instale as dependências**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Configure o banco de dados**:
-   - Crie um arquivo `.env` com as variáveis de ambiente:
-     ```
-     MYSQL_USER=seu_usuario
-     MYSQL_PASSWORD=sua_senha
-     MYSQL_HOST=localhost
-     MYSQL_DATABASE=nome_do_banco
-     MYSQL_ROOT_PASSWORD=senha_root
-     ```
-
-4. **Execute o script de criação do banco**:
-   ```bash
-   # Execute o CreateDatabase.sql no seu MySQL
+2. **Configure as variáveis de ambiente** — crie um arquivo `.env` na raiz do projeto:
+   ```env
+   MYSQL_USER=seu_usuario
+   MYSQL_PASSWORD=sua_senha
+   MYSQL_HOST=localhost
+   MYSQL_DATABASE=nome_do_banco
+   MYSQL_ROOT_PASSWORD=senha_root
    ```
 
-5. **Execute a aplicação**:
+3. **Crie o banco de dados** executando o script `CreateDatabase.sql` no seu MySQL.
+
+4. **Inicie a aplicação**:
    ```bash
-   python app/app.py
+   python app.py
    ```
 
-6. **Acesse a API**:
-   - URL: `http://localhost:5000`
+5. **Acesse a API** em `http://localhost:5000`.
 
 ### Executando com Docker
 
-1. **Configure o arquivo `.env`** (como acima)
+1. **Configure o arquivo `.env`** (como acima).
 
-2. **Execute com Docker Compose**:
+2. **Suba os containers**:
    ```bash
    docker-compose up --build
    ```
 
-3. **Acesse a API**:
-   - URL: `http://localhost:5000`
+3. **Acesse a API** em `http://localhost:5000`.
 
-## 📝 Notas de Aprendizado
+### Exemplos de Uso
 
-Este projeto foi desenvolvido com foco em aprendizado, abordando conceitos como:
+```bash
+# Listar usuários
+curl http://localhost:5000/users
+
+# Criar usuário
+curl -X POST http://localhost:5000/users \
+  -H 'Content-Type: application/json' \
+  -d '{"nome": "João Silva", "email": "joao@email.com", "idade": 30}'
+
+# Atualizar usuário
+curl -X PUT http://localhost:5000/users/1 \
+  -H 'Content-Type: application/json' \
+  -d '{"nome": "João Souza", "email": "joao@email.com", "idade": 31}'
+
+# Excluir usuário
+curl -X DELETE http://localhost:5000/users/1
+```
+
+## 📝 Conceitos Abordados
 
 - Estruturação de APIs RESTful
 - Conexão e operações com banco de dados MySQL
 - Tratamento de requisições HTTP
 - Validação de dados
-- Gerenciamento de variáveis de ambiente
+- Gerenciamento de variáveis de ambiente com `.env`
 - Containerização com Docker
 - Boas práticas de desenvolvimento Python
 
@@ -147,48 +157,4 @@ Este é um projeto de aprendizado pessoal. Sugestões e melhorias são bem-vinda
 
 ## 📄 Licença
 
-Este projeto é para fins educacionais e não possui licença específica.
-
-```env
-MYSQL_DATABASE=bancodados
-MYSQL_ROOT_PASSWORD=secret
-MYSQL_USER=usuario
-MYSQL_PASSWORD=senha
-MYSQL_HOST=db
-```
-
-Em seguida execute:
-
-```bash
-docker-compose up --build
-```
-
-A aplicação ficará disponível em `http://localhost:5000`.
-
-## Endpoints / Exemplos
-
-- Listar carros:
-
-```bash
-curl http://localhost:5000/carros
-```
-
-- Cadastrar carro (JSON):
-
-```bash
-curl -X POST http://localhost:5000/carros \
-  -H 'Content-Type: application/json' \
-  -d '{"id":6, "marca":"Toyota", "modelo":"Corolla", "ano":2010}'
-```
-
-## Observações e TODOs
-
-- O projeto usa uma lista em memória (`app/bd.py`) como fonte de dados. Para persistência, importe `db/CreateDatabase.sql` em um MySQL e adapte `app.py` para usar um cliente de BD.
-- O template `carro_form.html` existe, mas não há rota explícita `GET /carros/novo` implementada em `app/app.py`. Se desejar, posso adicionar essa rota para renderizar o formulário.
-- O `Dockerfile` atual executa `python app.py` no diretório `/app`; dependendo do contexto de cópia, pode ser necessário ajustar o `CMD` para `python app/app.py`.
-
-## Licença
-
-Projeto de aprendizado — sem licença definida.
-
----
+Projeto para fins educacionais — sem licença específica.
