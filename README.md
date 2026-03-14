@@ -1,4 +1,4 @@
-# API Flask de Aprendizado - Gerenciamento de Usuários
+# API Flask - Gerenciamento de Usuários
 
 API RESTful desenvolvida com Flask para fins de aprendizado e demonstração de conceitos fundamentais de desenvolvimento backend. Permite o gerenciamento completo de usuários (CRUD) utilizando MySQL como banco de dados.
 
