@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 cors = CORS(app)
 
-from routes.user_routes import *  # noqa: F401, F403
+from routes.user_routes import *
 
 # Parar de ordenar
 app.json.sort_keys = False
