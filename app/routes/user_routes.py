@@ -1,8 +1,9 @@
 from app import app
 from flask import jsonify, request
 from database.connection import get_db_connection
+from serializers.user_serializer import map_user
 
-# Endpoints
+# Endpoints relacionados aos usuários
 @app.route('/users', methods=['GET'])
 def get_users():
     cnx = get_db_connection()
@@ -13,17 +14,7 @@ def get_users():
 
     users = cursor.fetchall()
 
-    result = list()
-
-    for user in users:
-        result.append(
-            {
-                "id": user[0],
-                "nome": user[1],
-                "email": user[2],
-                "idade": user[3]
-            }
-        )
+    result = [map_user(user) for user in users]
 
     cursor.close()
     cnx.close()
@@ -40,12 +31,7 @@ def get_user(id):
     db_result = cursor.fetchall()
     row = db_result[0]
 
-    user = {
-        "id": row[0],
-        "nome": row[1],
-        "email": row[2],
-        "idade": row[3]
-    }
+    user = map_user(row)
 
     cursor.close()
     cnx.close()
