@@ -19,14 +19,14 @@ def get_users():
     cursor.execute(query, (limit, offset))
     users = cursor.fetchall()
 
-    users_dados = [map_user(user) for user in users]
+    users_datas = [map_user(user) for user in users]
 
     # Consulta para contar o total de usuários
     query_count = 'SELECT COUNT(*) FROM users;'
     cursor.execute(query_count)
-    contagem_total = cursor.fetchone()
+    total_count = cursor.fetchone()
     
-    contagem_total = contagem_total[0]
+    total_count = total_count[0]
 
     # page = str(page)
     # limit = str(limit)
@@ -35,13 +35,13 @@ def get_users():
     cursor.close()
     cnx.close()
 
-    paginas_total = ceil(contagem_total/limit)
+    total_pages = ceil(total_count/limit)
 
     print("page=", page)
     print("limit=", limit)
     print("offset=", offset)
 
-    return jsonify(data=users_dados, pagination={"page":page, "limit":limit, "total":contagem_total, "total_pages":paginas_total})
+    return jsonify(data=users_datas, pagination={"page":page, "limit":limit, "total":total_count, "total_pages":total_pages})
 
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
