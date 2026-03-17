@@ -44,24 +44,29 @@ def get_users():
     print("limit=", limit)
     print("offset=", offset)
 
-    return jsonify(data=users_datas, pagination={"page":page, "limit":limit, "total":total_count, "total_pages":total_pages})
+    return (jsonify(data=users_datas, pagination={"page":page, "limit":limit, "total":total_count, "total_pages":total_pages}), 200)
 
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     cnx = get_db_connection()
     cursor = cnx.cursor()
 
-    query = 'SELECT * FROM users WHERE id = %s'
+    query = 'SELECT id, nome, email, idade FROM users WHERE id = %s'
     cursor.execute(query, (id,))
 
-    db_result = cursor.fetchall()
-    row = db_result[0]
+    db_result = cursor.fetchone()
 
-    user_datas = map_user(row)
+    if not db_result:
+        cursor.close()
+        cnx.close()
+
+        return (jsonify(error="User not found"), 404)
+    
+    user_datas = map_user(db_result)
 
     cursor.close()
     cnx.close()
-    return jsonify(data=user_datas)
+    return (jsonify(data=user_datas)), 200
 
 @app.route('/users', methods=['POST'])
 def create_user():
