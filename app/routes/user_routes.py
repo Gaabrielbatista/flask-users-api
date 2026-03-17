@@ -66,7 +66,7 @@ def get_user(id):
 
     cursor.close()
     cnx.close()
-    return (jsonify(data=user_datas)), 200
+    return (jsonify(data=user_datas), 200)
 
 @app.route('/users', methods=['POST'])
 def create_user():
