@@ -2,23 +2,46 @@ from app import app
 from flask import jsonify, request
 from database.connection import get_db_connection
 from serializers.user_serializer import map_user
+from math import ceil
 
 # Endpoints relacionados aos usuários
 @app.route('/users', methods=['GET'])
 def get_users():
+    page = max(int(request.args.get("page", 1)), 1) # Pega o número da página, ou 1 se não for fornecido, max() garante que page não seja menor que 1
+    limit = min(int(request.args.get("limit", 10)), 100) # Pega o número de itens por página, ou 10 se não for fornecido, min limita para 100
+    offset = (page - 1) * limit # offset = quantidade de registros antes da página atual = (página anterior) × limit
+
+
     cnx = get_db_connection()
     cursor = cnx.cursor()
 
-    query = 'SELECT * FROM users'
-    cursor.execute(query)
-
+    query = 'SELECT id, nome, email, idade FROM users LIMIT %s OFFSET %s;'
+    cursor.execute(query, (limit, offset))
     users = cursor.fetchall()
 
-    result = [map_user(user) for user in users]
+    users_datas = [map_user(user) for user in users]
+
+    # Consulta para contar o total de usuários
+    query_count = 'SELECT COUNT(*) FROM users;'
+    cursor.execute(query_count)
+    total_count = cursor.fetchone()
+    
+    total_count = total_count[0]
+
+    # page = str(page)
+    # limit = str(limit)
+    # offset = str(offset)
 
     cursor.close()
     cnx.close()
-    return jsonify(menssagem="Users", dados=result)
+
+    total_pages = ceil(total_count/limit)
+
+    print("page=", page)
+    print("limit=", limit)
+    print("offset=", offset)
+
+    return jsonify(data=users_datas, pagination={"page":page, "limit":limit, "total":total_count, "total_pages":total_pages})
 
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
