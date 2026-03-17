@@ -8,7 +8,10 @@ from math import ceil
 @app.route('/users', methods=['GET'])
 def get_users():
     page = max(int(request.args.get("page", 1)), 1) # Pega o número da página, ou 1 se não for fornecido, max() garante que page não seja menor que 1
-    limit = min(int(request.args.get("limit", 10)), 100) # Pega o número de itens por página, ou 10 se não for fornecido, min limita para 100
+    
+    limit_max = max(int(request.args.get("limit", 10)), 1)
+    limit = min(limit_max, 100) # Pega o número de itens por página, ou 10 se não for fornecido, min limita para 100
+    
     offset = (page - 1) * limit # offset = quantidade de registros antes da página atual = (página anterior) × limit
 
 
@@ -54,43 +57,43 @@ def get_user(id):
     db_result = cursor.fetchall()
     row = db_result[0]
 
-    user = map_user(row)
+    user_datas = map_user(row)
 
     cursor.close()
     cnx.close()
-    return jsonify(mensagem="User", dados=user)
+    return jsonify(data=user_datas)
 
 @app.route('/users', methods=['POST'])
 def create_user():
-    user = request.json
+    user_datas = request.json
 
     cnx = get_db_connection()
     cursor = cnx.cursor()
 
     query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
-    cursor.execute(query, (user["nome"], user["email"], user["idade"]))
+    cursor.execute(query, (user_datas["nome"], user_datas["email"], user_datas["idade"]))
     
     cnx.commit()
 
     cursor.close()
     cnx.close()
-    return jsonify(mensagem="Sucesso!", dados=user)  
+    return jsonify(data=user_datas)  
 
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
-    user = request.json
+    user_datas = request.json
 
     cnx = get_db_connection()
     cursor = cnx.cursor()
 
     query = 'UPDATE users SET nome = %s, email = %s, idade = %s WHERE id = %s'
-    cursor.execute(query, (user["nome"], user["email"], user["idade"], id))
+    cursor.execute(query, (user_datas["nome"], user_datas["email"], user_datas["idade"], id))
 
     cnx.commit()
 
     cursor.close()
     cnx.close()
-    return jsonify(mensagem="Sucesso!", dados=user)
+    return jsonify(data=user_datas)
 
 @app.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
@@ -104,4 +107,4 @@ def delete_user(id):
 
     cursor.close()
     cnx.close()
-    return jsonify(mensagem="Sucesso!", id=id)
+    return jsonify(data=id)
