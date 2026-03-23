@@ -50,7 +50,7 @@ def get_user(id):
         db_result = cursor.fetchone()
 
         if not db_result:
-            return (jsonify(error="User not found"), 404)
+            return jsonify(error="User not found"), 404
     
         user_datas = map_user(db_result)
 
