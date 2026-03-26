@@ -7,6 +7,7 @@ import logging
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
 
+
 # Função para obter a conexão com o banco de dados
 def get_db_connection():
     cnx = mysql.connector.connect(
@@ -17,6 +18,7 @@ def get_db_connection():
         port=3307
     )
     return cnx
+
 
 # Gerenciador de contexto para a conexão com o banco de dados
 @contextmanager
