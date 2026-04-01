@@ -9,12 +9,12 @@ from math import ceil
 @app.route('/users', methods=['GET'])
 def get_users():
     page = max(int(request.args.get("page", 1)),
-               1)  # Pega o número da página, ou 1 se não for fornecido, max() garante que page não seja menor que 1
+               1)
 
     limit_max = max(int(request.args.get("limit", 10)), 1)
-    limit = min(limit_max, 100)  # Pega o número de itens por página, ou 10 se não for fornecido, min limita para 100
+    limit = min(limit_max, 100)
 
-    offset = (page - 1) * limit  # offset = quantidade de registros antes da página atual = (página anterior) × limit
+    offset = (page - 1) * limit
 
     with connection_manager() as cursor:
         query = 'SELECT id, nome, email, idade FROM users LIMIT %s OFFSET %s;'
@@ -27,14 +27,13 @@ def get_users():
         query_count = 'SELECT COUNT(*) FROM users;'
         cursor.execute(query_count)
 
-        total_count = cursor.fetchone()
-        total_count = total_count[0]
-
-        # page = str(page)
-        # limit = str(limit)
-        # offset = str(offset)
+        total_count = cursor.fetchone()[0]
 
     total_pages = ceil(total_count / limit)
+
+    # page = str(page)
+    # limit = str(limit)
+    # offset = str(offset)
 
     print("page =", page)
     print("limit=", limit)
@@ -79,7 +78,7 @@ def update_user(id):
         query = 'UPDATE users SET nome = %s, email = %s, idade = %s WHERE id = %s'
         cursor.execute(query, (user_datas["nome"], user_datas["email"], user_datas["idade"], id))
 
-    return jsonify(data=user_datas)
+    return jsonify(data=user_datas), 200
 
 
 @app.route('/users/<int:id>', methods=['DELETE'])
@@ -88,4 +87,4 @@ def delete_user(id):
         query = 'DELETE FROM users WHERE id = %s'
         cursor.execute(query, (id,))
 
-    return jsonify(data=id)
+    return jsonify(data=id), 204
