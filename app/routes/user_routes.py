@@ -21,7 +21,7 @@ def get_users():
         cursor.execute(query, (limit, offset))
 
         users = cursor.fetchall()
-        users_datas = [map_user(user) for user in users]
+        users_data = [map_user(user) for user in users]
 
         # Consulta para contar o total de usuários
         query_count = 'SELECT COUNT(*) FROM users;'
@@ -39,7 +39,7 @@ def get_users():
     print("limit=", limit)
     print("offset =", offset)
 
-    return jsonify(data=users_datas,
+    return jsonify(data=users_data,
                    pagination={"page": page, "limit": limit, "total": total_count, "total_pages": total_pages}), 200
 
 
@@ -54,31 +54,31 @@ def get_user(id):
         if not db_result:
             return jsonify(error="User not found"), 404
 
-        user_datas = map_user(db_result)
+        user_data = map_user(db_result)
 
-    return jsonify(data=user_datas), 200
+    return jsonify(data=user_data), 200
 
 
 @app.route('/users', methods=['POST'])
 def create_user():
-    user_datas = request.json
+    user_data = request.json
 
     with connection_manager() as cursor:
         query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
-        cursor.execute(query, (user_datas["nome"], user_datas["email"], user_datas["idade"]))
+        cursor.execute(query, (user_data["nome"], user_data["email"], user_data["idade"]))
 
-    return jsonify(data=user_datas), 201
+    return jsonify(data=user_data), 201
 
 
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
-    user_datas = request.json
+    user_data = request.json
 
     with connection_manager() as cursor:
         query = 'UPDATE users SET nome = %s, email = %s, idade = %s WHERE id = %s'
-        cursor.execute(query, (user_datas["nome"], user_datas["email"], user_datas["idade"], id))
+        cursor.execute(query, (user_data["nome"], user_data["email"], user_data["idade"], id))
 
-    return jsonify(data=user_datas), 200
+    return jsonify(data=user_data), 200
 
 
 @app.route('/users/<int:id>', methods=['DELETE'])
