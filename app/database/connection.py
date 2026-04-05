@@ -2,13 +2,11 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 from contextlib import contextmanager
-import logging
+# import logging
 
-# Carrega as variáveis de ambiente do arquivo .env
+# Carrega as variáveis de ambiente
 load_dotenv()
 
-
-# Função para obter a conexão com o banco de dados
 def get_db_connection():
     cnx = mysql.connector.connect(
         user=os.getenv('MYSQL_USER'),
@@ -18,7 +16,6 @@ def get_db_connection():
         port=3307
     )
     return cnx
-
 
 # Gerenciador de contexto para a conexão com o banco de dados
 @contextmanager
