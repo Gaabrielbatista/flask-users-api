@@ -21,6 +21,7 @@ def get_users():
         cursor.execute(query, (limit, offset))
 
         users = cursor.fetchall()
+        print(users)
         users_data = [map_user(user) for user in users]
 
         # Consulta para contar o total de usuários
@@ -59,13 +60,50 @@ def get_user(id):
     return jsonify(data=user_data), 200
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/users', methods=['POST']) # Arrumar
 def create_user():
     user_data = request.json
 
+    if not user_data:
+        return jsonify(error= "Nenhum dado JSON fornecido."), 400
+
+    name = user_data.get("nome")
+    email = user_data.get("email")
+    age = user_data.get("idade", None)
+
+    # name
+    if not name or name.isspace():
+        return jsonify(error="Campo 'nome' é obrigatório e não pode estar vazio."), 400
+
+    if not isinstance(name, str):
+        return jsonify(error="Campo 'nome' deve ser String."), 400
+
+    # email
+    if not email or email.isspace():
+        return jsonify(error="Campo 'email' é obrigatório e não pode estar vazio."), 400
+
+    if not isinstance(email, str):
+        return jsonify(error="Campo 'email' deve ser String."), 400
+
+    if "." not in email or "@" not in email:
+        return jsonify(error="Campo 'email' deve conter '@' e '.' (ponto)."), 400
+
+    # age
+    if not age:
+        if not isinstance(age, int):
+            return jsonify(error="Campo 'idade' deve ser Integer."), 400
+
+    if age < 1 or age > 120:
+            return jsonify(error="Campo 'idade' deve estar entre 1 e 120."), 400
+
     with connection_manager() as cursor:
-        query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
-        cursor.execute(query, (user_data["nome"], user_data["email"], user_data["idade"]))
+        if age:
+            query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
+            cursor.execute(query, (name, email, age))
+        else:
+            query = 'INSERT INTO users (nome, email) VALUES (%s, %s)' # arrumar
+            cursor.execute(query, (name, email))
+
 
     return jsonify(data=user_data), 201
 
