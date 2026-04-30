@@ -26,13 +26,14 @@ def get_users():
         cursor.execute(query_count)
 
         total_count = cursor.fetchone()[0]
-        print(total_count)
+        
     total_pages = ceil(total_count / limit)
 
     # page = str(page)
     # limit = str(limit)
     # offset = str(offset)
-
+    
+    print("Total users =", total_count)
     print("page =", page)
     print("limit=", limit)
     print("offset =", offset)
