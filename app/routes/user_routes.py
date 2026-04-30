@@ -21,7 +21,6 @@ def get_users():
         cursor.execute(query, (limit, offset))
 
         users = cursor.fetchall()
-        print(users)
         users_data = [map_user(user) for user in users]
 
         # Consulta para contar o total de usuários
@@ -29,7 +28,7 @@ def get_users():
         cursor.execute(query_count)
 
         total_count = cursor.fetchone()[0]
-
+        print(total_count)
     total_pages = ceil(total_count / limit)
 
     # page = str(page)
@@ -53,19 +52,19 @@ def get_user(id):
         db_result = cursor.fetchone()
 
         if not db_result:
-            return jsonify(error="User not found"), 404
+            return jsonify(error="Usuário não encontrado"), 404
 
         user_data = map_user(db_result)
 
     return jsonify(data=user_data), 200
 
 
-@app.route('/users', methods=['POST']) # Arrumar
+@app.route('/users', methods=['POST'])  # Arrumar IDADE
 def create_user():
     user_data = request.json
 
     if not user_data:
-        return jsonify(error= "Nenhum dado JSON fornecido."), 400
+        return jsonify(error="Nenhum dado JSON fornecido."), 400
 
     name = user_data.get("nome")
     email = user_data.get("email")
@@ -89,26 +88,34 @@ def create_user():
         return jsonify(error="Campo 'email' deve conter '@' e '.' (ponto)."), 400
 
     # age
-    if not age:
+    if age:
         if not isinstance(age, int):
             return jsonify(error="Campo 'idade' deve ser Integer."), 400
-
-    if age < 1 or age > 120:
+        if age < 1 or age > 120:
             return jsonify(error="Campo 'idade' deve estar entre 1 e 120."), 400
+    else:
+        if age is not None:
+            return jsonify(error="Campo 'idade' inválido."), 400
+
+    name_format = name.strip().title()
+    email_format = email.strip().lower()
+    print("name:", name_format, "email:", email_format, "age:", age)
 
     with connection_manager() as cursor:
-        if age:
-            query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
-            cursor.execute(query, (name, email, age))
-        else:
-            query = 'INSERT INTO users (nome, email) VALUES (%s, %s)' # arrumar
-            cursor.execute(query, (name, email))
+        query = 'INSERT INTO users (nome, email, idade) VALUES (%s, %s, %s)'
+        cursor.execute(query, (name_format, email_format, age))
+
+        new_id = cursor.lastrowid
+        query = 'SELECT id, nome, email, idade FROM users WHERE id = %s'
+        cursor.execute(query, (new_id,))
+
+        db_result = cursor.fetchone()
+        user_data_format = map_user(db_result)
+
+    return jsonify(data=user_data_format), 201
 
 
-    return jsonify(data=user_data), 201
-
-
-@app.route('/users/<int:id>', methods=['PUT'])
+@app.route('/users/<int:id>', methods=['PUT'])  # Validar
 def update_user(id):
     user_data = request.json
 
@@ -119,7 +126,7 @@ def update_user(id):
     return jsonify(data=user_data), 200
 
 
-@app.route('/users/<int:id>', methods=['DELETE'])
+@app.route('/users/<int:id>', methods=['DELETE'])  # Validar
 def delete_user(id):
     with connection_manager() as cursor:
         query = 'DELETE FROM users WHERE id = %s'
