@@ -4,8 +4,6 @@ from database.connection import connection_manager
 from serializers.user_serializer import map_user
 from math import ceil
 
-
-# Endpoints
 @app.route('/users', methods=['GET'])
 def get_users():
     page = max(int(request.args.get("page", 1)),
