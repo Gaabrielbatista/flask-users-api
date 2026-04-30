@@ -4,8 +4,6 @@ from database.connection import connection_manager
 from serializers.user_serializer import map_user
 from math import ceil
 
-
-# Endpoints relacionados aos usuários
 @app.route('/users', methods=['GET'])
 def get_users():
     page = max(int(request.args.get("page", 1)),
@@ -23,7 +21,6 @@ def get_users():
         users = cursor.fetchall()
         users_data = [map_user(user) for user in users]
 
-        # Consulta para contar o total de usuários
         query_count = 'SELECT COUNT(*) FROM users;'
         cursor.execute(query_count)
 
