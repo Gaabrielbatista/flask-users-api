@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from contextlib import contextmanager
 # import logging
 
-# Carrega as variáveis de ambiente
 load_dotenv()
 
 def get_db_connection():
@@ -17,7 +16,6 @@ def get_db_connection():
     )
     return cnx
 
-# Gerenciador de contexto para a conexão com o banco de dados
 @contextmanager
 def connection_manager():
     cnx = get_db_connection()
