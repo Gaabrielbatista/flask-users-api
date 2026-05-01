@@ -1,4 +1,3 @@
-# Define a função de mapeamento para o usuário
 def map_user(row):
     return {
         "id": row[0],
